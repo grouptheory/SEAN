@@ -1,0 +1,14 @@
+#
+# # start comment to end of line
+# blank lines are ignored.
+# "."'s in nsap are optional.
+# code requiring optional app names will prompt for them if not present here
+# the 0x in the nsap optional
+# placement on a line is free form (as many spaces or tabs as desired)
+# 
+#                     Nsap                          host  [app]
+
+0x47.0005.80.ffde00.0000.0000.0104.000000000000.00   foo
+0x47.0005.80.ffde00.0000.0000.0104.000000000001.00   bar
+#0x47.0005.80.ffde00.0000.0000.0104.000000000002.00   baz
+#0x47.0005.80.ffde00.0000.0000.0104.000000000003.00   pong

@@ -1,0 +1,453 @@
+---------------------------------------------------------------------------------------------
+TUTORIAL 1 (basic tutorial)
+
+server1		This application registers a service and so is informed whenever ANY 
+		incoming connection comes in, and upon receiving said notification, 
+		it accepts the call.  These calls are never torn down, and the 
+		application assumes a best case scenario where all of its requests are granted.
+
+		New methods you will learn about:
+		o ATM_Service:: Register()
+		o ATM_Service:: Establish()
+
+		New callbacks you will learn about:
+
+		o Controller:: Boot()
+		o Controller:: Service_Active()
+
+
+		Run server1 in conjunction with client1, client2, or
+		client3.
+
+		Start server1 before running a client.
+
+		Usage: server1 host-name host-file
+
+		Example:
+		server1 fermi-0 hosts
+		client1 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 2 (basic tutorial)
+
+client1		This application makes a call to a command-line specified host.
+		The call is never torn down, and the application assumes a best case
+		scenario where its request succeeds.
+
+		New methods you will learn about:
+		o ATM_Call:: Setting of Attributes
+		o Outgoing_ATM_Call:: Establish()
+
+		New callbacks you will learn about:
+
+		o Controller:: Boot()
+		o Controller:: Call_Active()
+
+
+		Run client1 in conjunction with server1.
+		Start server1 before running client1.
+
+		Usage: client1 host-name server-name host-file
+
+		Example:
+		server1 fermi-0 hosts
+		client1 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 3 (builds on client1)
+
+client2		This application makes a call to a command-line specified host.
+		The call is never torn down, and the application assumes a best case
+		scenario where its request succeeds.
+	NEW >	It registers periodic callback for 20 seconds from now, upon which it will exit.
+
+		New methods you will learn about:
+		o Controller:: RegisterPeriodicCallback()
+
+		New callbacks you will learn about:
+		
+		o Controller:: PeriodicCallback()
+
+
+		Run client2 in conjunction with server2.
+		Start server1 before running client2.
+
+		Usage: client2 host-name server-name host-file
+
+		Example:
+		server1 fermi-0 hosts
+		client2 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 4 (builds on client2)
+
+client3		This application makes a call to a command-line specified host.
+		The call is never torn down, and the application assumes a best case
+		scenario where its request succeeds.
+		It registers periodic callback for 20 seconds from now, upon which it will exit.
+	NEW >	It registers periodic callback for 10 seconds from now, upon which
+		  it will cancel the 10 second periodic callback and send some data on the connection.
+
+		New methods you will learn about:
+
+		o Outgoing_ATM_Call:: SendData()
+
+		New callbacks you will learn about:
+
+		o Controller:: CancelPeriodicCallback()
+
+
+		Run client3 in conjunction with server2.
+		Start server1 before running client3.
+
+		Usage: client3 host-name server-name host-file
+
+		Example:
+		server1 fermi-0 hosts
+		client3 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 5 (builds on server1)
+
+server2		This application registers a service and so is informed whenever ANY 
+		incoming connection comes in, and upon receiving said notification, 
+		it accepts the call.  These calls are never torn down, and the 
+		application assumes a best case scenario where all of its requests are granted.
+	NEW >	This server will echo any data that arrives on an active connection.
+
+		New methods you will learn about:
+
+		-none-
+
+		New callbacks you will learn about:
+		
+		o Controller:: IncomingData()
+
+
+		Run server2 in conjunction with client1, client2, or
+		client3.
+
+		Start server2 before running a client.
+
+		Usage: server2 host-name host-file
+
+		Example:
+		server2 fermi-0 hosts
+		client3 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 6 (builds on server2)
+
+server3		This application registers a service and so is informed whenever ANY 
+		incoming connection comes in, and upon receiving said notification, 
+		it accepts the call.  These calls are never torn down, and the 
+		application assumes a best case scenario where all of its requests are granted.
+		This server will echo any data that arrives on an active connection.
+	NEW >	This server notices when a connection becomes inactive.
+
+		New methods you will learn about:
+
+		-none-
+
+		New callbacks you will learn about:
+		
+		o Controller:: Call_Inactive()
+
+
+		Run server3 in conjunction with client1, client2, or
+		client3.
+
+		Start server3 before running a client.
+
+		Usage: server3 host-name host-file
+
+		Example:
+		server3 fermi-0 hosts
+		client3 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 7 (builds on server3)
+
+server4		This application registers a service and so is informed whenever ANY 
+		incoming connection comes in, and upon receiving said notification, 
+		it accepts the call.  These calls are never torn down, and the 
+		application assumes a best case scenario where all of its requests are granted.
+		This server will echo any data that arrives on an active connection.
+		This server notices when a connection becomes inactive.
+	NEW >	When an incoming connection arrives, the server deregisters its service.
+		When a connection becomes inactive, the server registers its service.
+		In this way only one call is ever active.
+
+		New methods you will learn about:
+
+		o Service:: Deregister()
+		
+		New callbacks you will learn about:
+		
+		o Controller:: Service_Inactive()
+
+
+		Run server4 in conjunction with client1, client2, or
+		client3, client4, client5, client6, or client7.
+
+		Start server4 before running a client.  
+		Start two instances of server4 before using it with
+		client5, client6, or client7.
+
+		Usage: server4 host-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		server4 dirac-3 hosts
+		client5 bohr-1 fermi-0 dirac-3 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 8 (builds on client3)
+
+client4		This application makes a call to a command-line specified host.
+		The application assumes a best case scenario where its request succeeds.
+		It registers periodic callback for 10 seconds from now, upon which
+		it will cancel the 10 second periodic callback and send some data on the connection.
+	NEW >	It registers periodic callback for 20 seconds from now, upon which it will 
+		  tear down the call but not exit.
+
+		New methods you will learn about:
+		
+		o ATM_Call:: TearDown()
+
+		New callbacks you will learn about:
+
+		--none--
+
+
+		Run client4 in conjunction with server4.
+		Start server4 before running client4.
+
+		Usage: client4 host-name server-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		client4 bohr-1 fermi-0 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 9 (builds on client4)
+
+client5		This application makes a call to a command-line specified 
+		hosts.  The application assumes a best case scenario where 
+		its request succeeds.  When the call becomes active, it 
+		registers a periodic callback for 10 seconds from now, 
+		upon which it will cancel the 10 second periodic callback 
+		and send some data on the connection. It registers periodic 
+		callback for 20 seconds from now, upon which it will tear 
+		down the call but not exit.
+
+	NEW >	When the call becomes active, it adds the second command-line 
+		specified host to the point-to-multipoint call.
+
+		New functions you will learn about:
+		
+		o MakeLeaf()
+
+		New methods you will learn about:
+
+		o ATM_Leaf::Add()
+
+		o ATM_Leaf::Get_leaf_ID()
+
+		o ATM_Attributes::Set_LIJ_call_id()
+
+		New callbacks you will learn about:
+
+		o Controller::Leaf_Active()
+
+
+		Run client5 in conjunction with two instances of
+		server4.
+
+		Start both servers before running client5.
+
+		Usage: client5 host-name server-name leaf-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		server4 dirac-3 hosts
+		client5 bohr-1 fermi-0 dirac-3 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 10 (builds on client5)
+
+client6		This application makes a call to a command-line specified 
+		hosts.  The application assumes a best case scenario where 
+		its request succeeds.  When the call becomes active, it 
+		registers a periodic callback for 10 seconds from now, 
+		upon which it will cancel the 10 second periodic callback 
+		and send some data on the connection. It registers periodic 
+		callback for 20 seconds from now, upon which it will tear 
+		down the call but not exit. When the call becomes active, 
+		it adds the second command-line specified host to the
+		point-to-multipoint call.
+
+	NEW >	At 15 seconds from now, it drops the second leaf of the call.
+
+		New methods you will learn about:
+
+		o ATM_Leaf::Drop()
+
+		New callbacks you will learn about:
+
+		o Controller::Leaf_Inactive()
+
+
+		Run client6 in conjunction with two instances of
+		server4.
+
+		Start both servers before running client6.
+
+		Usage: client6 host-name server-name leaf-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		server4 dirac-3 hosts
+		client6 bohr-1 fermi-0 dirac-3 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 11 (builds on client5 and client 6)
+
+client7		This application makes a call to a command-line specified 
+		hosts.  The application assumes a best case scenario where 
+		its request succeeds.  When the call becomes active, it 
+		registers a periodic callback for 10 seconds from now, 
+		upon which it will cancel the 10 second periodic callback 
+		and send some data on the connection. It registers periodic 
+		callback for 20 seconds from now, upon which it will tear 
+		down the call but not exit. When the call becomes active, 
+		it adds the second command-line specified host to the
+		point-to-multipoint call.
+
+	NEW >	At 15 seconds from now, it drops the initial leaf of the call.
+
+		New methods you will learn about:
+
+		o Outgoing_ATM_Call::Get_Initial_Leaf()
+
+		New callbacks you will learn about:
+
+		-- none --
+
+
+		Run client7 in conjunction with two instances of
+		server4.
+
+		Start both servers before running client7.
+
+		Usage: client7 host-name server-name leaf-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		server4 dirac-3 hosts
+		client7 bohr-1 fermi-0 dirac-3 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 12a (builds on client7)
+
+client8		This application makes a point-to-multipoint call to a
+		command-line specified host.  The application assumes a best 
+		case scenario where its request succeeds.  
+		It registers periodic callback for 20 seconds from now, upon 
+		which it will tear down the call.  When the call becomes
+		inactive, it will exit.
+
+	NEW >	When a leaf asks to join the point-to-multipoint call,
+		it is added to the call.
+
+		New methods you will learn about:
+
+		o Outgoing_ATM_Call::Get_LIJ_Request()
+
+		o Leaf::Add()
+
+		New callbacks you will learn about:
+
+		o Controller::Incoming_LIJ()
+
+
+		Run client8 with client9 and server4.
+
+		Start server4 before running client8.
+		Start client8 before running client9.
+
+		Usage: client8 host-name server-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		client8 bohr-1 fermi-0 hosts
+		client9 dirac-3 bohr-1 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 12b (builds on client7)
+
+client9		This application joins a point-to-multipoint call.
+		The application assumes a best case scenario where its 
+		request succeeds.  It registers periodic callback for 20 
+		seconds from now, upon which it tear down the call.
+		When the call becomes inactive, it will exit.
+
+	NEW >	The application is a leaf that initiates a join to a
+		point-to-multipoint call.
+
+		New methods you will learn about:
+
+		o Leaf_Initiated_ATM_Call::Leaf_Initiated_ATM_Call()
+
+		o Leaf_Initiated_ATM_Call::Request()
+
+		New callbacks you will learn about:
+
+		o Controller::Incoming_Call_From_Root()
+
+
+		Run client9 with client8 and server4.
+
+		Start server4 before running client8.
+		Start client8 before running client9.
+
+		Usage: client9 host-name root-name host-file
+
+		Example:
+		server4 fermi-0 hosts
+		client8 bohr-1 fermi-0 hosts
+		client9 dirac-3 bohr-1 hosts
+
+---------------------------------------------------------------------------------------------
+TUTORIAL 13 (builds on client 8)
+
+client10	This application makes a point-to-multipoint call without
+		specifying the called party.  The application assumes a best 
+		case scenario where its request succeeds.  
+		It registers periodic callback for 20 seconds from now, upon 
+		which it tear down the call.  When the call becomes inactive,
+		it will exit.
+
+	NEW >	When a leaf asks to join the point-to-multipoint call,
+		it is added to the call.  The first leaf appears as
+		Call_Active() instead of Incoming_LIJ().
+
+		New methods you will learn about:
+
+		-- none --
+
+		New callbacks you will learn about:
+
+		-- none --
+
+
+		Run client10 with one or more instances of client9.
+		Start client10 before running client9.
+
+		Usage: client10 host-name host-file
+
+		Example:
+		client10 bohr-1 hosts
+		client9 fermi-0 bohr-1 hosts
+		client9 dirac-3 bohr-1 hosts
+

@@ -1,0 +1,83 @@
+		Quick Summary of Changes from SEAN 1.0
+
+* code now compiles with egcs 1.1.1 (1.1.2 has not been tested)
+* ilmi daemon works with Fore Version 5.3 switch
+* ilmi daemon retreives esi from kernel
+* the sean 1.0 documentation is unchanged
+
+			     Installation
+
+SEAN is available from the SEAN web page, which is located at
+http://cmf.nrl.navy.mil/CCS/sean/
+
+To unpack SEAN, uncompress it and then unpack the tar file as follows
+
+% gunzip sean-1.0.1.tar.gz
+% tar xvf sean-1.0.1.tar
+or
+% gtar zxvf sean-1.0.1.tar.gz
+
+			    Compiling SEAN
+
+SEAN is self-configuring.  The libraries in the SEAN distribution are
+known to compile using g++ 2.7.2 and egcs 1.1.1 on SunOS5.x(live+sim),
+IRIX6.5(live[untested]+sim), Linux2.0.x(sim), and NetBSD(sim).
+Our main development cycles have been on SunOS5.6.
+
+If you are building SEAN on one of the supported architectures you may
+create the libraries by
+
+% cd sean-1.0.1/src
+% gmake library
+
+Note that if gnu make is available as make, you may use make in place of
+gmake. 
+
+Once the libraries have been created you may build the simulation
+daemon, simswitch, and the live daemon, sd by
+
+% cd sean-1.0.1/src/sean/daemon
+% gmake
+
+If you plan to run on live atm you need the FORE xti interface
+% cd sean-1.0.1/src/sean/ilmi
+% gmake
+% cd ../daemon
+% gmake
+% cd ../examples
+% gmake; gmake sim
+
+
+If you wish to run the visualizer, NV, you will need to edit
+sean-1.0.1/src/FW/NV/QT_config, specifying the location of the Qt
+libraries and header files.  Then build NV by
+
+% cd sean-1.0.1/src/FW/NV
+% gmake
+
+
+		 Porting SEAN to Other Architectures
+
+If you are attempting to port SEAN to another UNIX, you can begin by
+
+% cd sean-1.0.1/src
+% gmake
+
+You will need to know how to construct shareable libraries on your
+architecture; this is done in src/common/Make-rules.  To resolve any
+prototyping problems you will need to modify src/common/cprototypes.h
+and create src/common/cproto_YOUR_OS.h
+
+There are 4 major directories under src/, DS, FW, codec, and sean.  In
+addition there is src/common where parts of the makefile structure and
+auxiliary scripts and programs are kept.
+
+In order to support multiple operating systems, the object files
+needed to make the libraries are put into directories whose names are
+OS dependent, in each of the major directories -- for example
+src/DS/_o.SunOS5 contains the Solaris compiled object files for the DS
+library.  These object directories are automatically created when
+needed.  The libraries are placed in sean-1.0.1/lib/${OS}. The value 
+of ${OS} is determined by the script src/common/get_OS.sh. The default
+is to use the output of uname -s. Currently the only exception is that
+SunOS is used for SunOS4.x and SunOS5 is used for Solaris.

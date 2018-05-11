@@ -1,0 +1,140 @@
+Server tests
+------------
+
+DuplicateServicesTest
+
+Tests the registration of two, identical services.  The first one must
+become active and the second one must become inactive.  When the first
+one becomes active, it Service_Active() deregisters it.  The first one
+must then become inactive.  After a lifetime of seconds, the program
+ends.  If all three conditions have been met then the teset succeeded.
+Otherwise, the test failed.
+
+Usage: DuplicateServices ccd-port lifetime [visualizer-pipe]
+
+where lifetime is the number of seconds to run the test.
+
+
+
+NServiceTest 
+Implements a controller that registers N services at boot time.  When
+all N are active, it deregisters the oldest one.  When that service is
+inactive, the controller registers a new one.  It repeats this pattern
+of deregistering and registering until the stop time is reached.  Then
+it deregisters each service.  When all are inactive the test ends,
+printing that it succeeded.  If another stop time goes by before all
+of the services are inactive, the test ends, printing that it failed.
+
+Usage: NServiceTest ccd-port num-services [lifetime [visualizer-pipe]]
+The default num-services is 10.
+The default lifetime is -1, meaning "Don't ever stop."
+
+
+OneServiceTest
+Implements a controler that registers a single service with a CCD.
+When the service becomes active, the controller deregisters it.  When
+the service becomes inactive, the controller exits.
+
+Usage: OneServiceTest ccd-port [lifetime [visualizer-pipe]]
+The default lifetime is -1, meaning "Don't ever stop."
+
+
+Client tests
+------------
+
+call_blaster
+
+This client makes calls to a non-existent service.  When a call goes
+inactive, call_blaster makes another one.  It keeps this up until the
+end of its lifetime or until one of the calls becomes active.
+
+Usage: call_blaster ccd-port [lifetime [visualizer-pipe]]
+The default lifetime is 10.0 seconds.
+
+
+call_periodic
+
+This client makes calls to a service that may or may not exist.  It
+counts the number of active and inactive calls.  Every so many
+seconds, it tears down the single, active call, if there is one, or it
+makes another call.  It stops at the end of its lifetime.
+
+Usage: call_periodic port period [stoptime [bhli [visualizer-pipe]]]
+The default periodicity is 1.0 seconds
+The default stoptime is 10.0 seconds
+The default bhli is "call_periodic"
+The default visualizer-pipe is "active_exit.output"
+
+
+
+Client and Server tests
+-----------------------
+
+active_exit
+A client and server pair.  The server always accepts a call.  The
+client exits when the call becomes active.
+
+Usage: active_exit c|s port [stoptime [bhli [visualizer-pipe]]]
+The default stoptime is 10.0 seconds
+The default bhli is "active_exit
+The default visualizer-pipe is "active_exit.output"
+
+active_hangup
+A client and server pair.  The server always accepts a call.  When the
+call becomes active, the client releases it.
+
+Usage: active_hangup c|s port [stoptime [bhli [visualizer-pipe]]]
+The default stoptime is 10.0 seconds
+The default bhli is "active_exit
+The default visualizer-pipe is "active_hangup.output"
+
+
+echo_client
+
+A client and server pair.  The client sends text data to the server.
+Somebody echoes it.
+
+echo_client c|s port [stoptime [visualizer-pipe]]
+
+
+echo_screen
+
+Currently, this is the same as echo_client.
+
+
+HangupActiveTest
+Implements a controller that hangs up on calls that become active.
+It stops after a lifetime of seconds.
+
+Usage: HangupActiveTest ccd-port lifetime [visualizer-pipe]
+
+
+HangupPeriodicTest
+Implements the controller for a service that regularly hangs up on the
+calls that it accepts.  Each call must go thought the usual life cycle
+of incoming call, call active, call inactive.
+
+Usage: HangupPeriodic ccd-port period [lifetime [visualizer-pipe]]
+period is how often to hangup a call.  The default is 1.0 seconds.
+lifetime is the number of seconds to run the test.  The default is 10.0 
+seconds
+
+
+NeverAcceptTest
+Implements a controller that registers a service that never accepts
+calls.  When a call arrives, the controller tears it down, waits for
+the call to become inactive, deregisters the service, waits for the
+service to become inactive, then exits.
+
+Usage: NeverAcceptTest ipc-port [lifetime [visualizer-pipe]]
+The default lifetime is -1, meaning "Don't ever stop."
+
+
+periodic_hangup
+
+A client and server pair.  The client calls the server and hangs up
+some seconds after the call becomes active.  When the call becomes
+inactive, it makes another call.
+
+Usage: periodic_hangup c|s port [stoptime [visualizer-pipe]]
+

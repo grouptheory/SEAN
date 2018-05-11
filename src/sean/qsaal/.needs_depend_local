@@ -1,0 +1,8 @@
+# THIS FILE IS USED TO TRIGGER make depend_local - Do NOT DELETE
+#
+# fake_aal.cc       produces fake_aal_${OS}.[oO]
+# fore_aal.cc       produces fore_aal_${OS}.[oO]
+# qsaal_expander.cc produces qsall_expander_{fake,fore}_${OS}.[oO]
+# make depend_local (at end of make depend if .needs_depend_local exists)
+# produces rules for sean_io.o and xtio.o
+#

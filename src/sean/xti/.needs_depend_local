@@ -1,0 +1,10 @@
+# DO NOT DELETE this FILE it changes the behavior of make depend
+#
+# sean_io.cc produces sean_io_{fore,fake}.[oO]
+# xtio.cc    produces xtio_${OS}.[oO]
+#
+# make depend_local (at end of make depend if .needs_depend_local exists)
+# produces rules for sean_io.o and xtio.o
+#
+# rule depend_local in local Makefile fixes that
+
